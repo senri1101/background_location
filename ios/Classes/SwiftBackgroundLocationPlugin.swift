@@ -61,7 +61,6 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             }
 
             SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
-            SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
             running = true
             result(true)
         } else if (call.method == "is_service_running") {
@@ -71,7 +70,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             running = false
             SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: "stop_location_service")
             SwiftBackgroundLocationPlugin.locationManager?.stopUpdatingLocation()
-            SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
+            // SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
             result(true)
         }
     }
