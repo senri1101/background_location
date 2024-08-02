@@ -23,14 +23,15 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             SwiftBackgroundLocationPlugin.locationManager?.requestAlwaysAuthorization()
 
             SwiftBackgroundLocationPlugin.locationManager?.allowsBackgroundLocationUpdates = true
-            if #available(iOS 11.0, *) {
-                SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = false;
-            }
+            
+            SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
+            
             SwiftBackgroundLocationPlugin.locationManager?.pausesLocationUpdatesAutomatically = false
         }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
         SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: "method")
 
         if (call.method == "start_location_service") {
@@ -73,6 +74,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             // SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
             result(true)
         }
+        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = false;
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -82,6 +84,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
         let location = [
             "speed": locations.last!.speed,
             "altitude": locations.last!.altitude,
@@ -92,7 +95,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             "time": locations.last!.timestamp.timeIntervalSince1970 * 1000,
             "is_mock": false
         ] as [String : Any]
-
+        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = false;
         SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: location)
     }
 }
