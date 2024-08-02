@@ -31,7 +31,6 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
         SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: "method")
 
         if (call.method == "start_location_service") {
@@ -74,7 +73,6 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             // SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
             result(true)
         }
-        SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = false;
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
