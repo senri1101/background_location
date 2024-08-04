@@ -24,9 +24,9 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
 
             SwiftBackgroundLocationPlugin.locationManager?.allowsBackgroundLocationUpdates = true
-            
-            SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
-            
+            // if #available(iOS 11.0, *) {
+            //     SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
+            // }
             SwiftBackgroundLocationPlugin.locationManager?.pausesLocationUpdatesAutomatically = false
         }
     }
@@ -42,7 +42,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             let distanceFilter = args?["distance_filter"] as? Double
             let priority = args?["priority"] as? Int
 
-            SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter ?? 0
+            // SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter ?? 0
 
             if (priority == 0) {
                 SwiftBackgroundLocationPlugin.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -62,6 +62,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             }
 
             SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
+            // SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
             running = true
             result(true)
         } else if (call.method == "is_service_running") {
