@@ -42,7 +42,9 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             let distanceFilter = args?["distance_filter"] as? Double
             let priority = args?["priority"] as? Int
 
-            // SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter ?? 0
+            if (distanceFilter != nil) {
+                SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter;
+            }
 
             if (priority == 0) {
                 SwiftBackgroundLocationPlugin.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -61,7 +63,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
                 }
             }
 
-            // SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
+            SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
             SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
             running = true
             result(true)
@@ -71,7 +73,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             initLocationManager()
             running = false
             SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: "stop_location_service")
-            // SwiftBackgroundLocationPlugin.locationManager?.stopUpdatingLocation()
+            SwiftBackgroundLocationPlugin.locationManager?.stopUpdatingLocation()
             SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
             result(true)
         }
