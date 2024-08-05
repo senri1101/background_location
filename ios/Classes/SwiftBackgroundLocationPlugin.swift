@@ -24,9 +24,9 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
 
             SwiftBackgroundLocationPlugin.locationManager?.allowsBackgroundLocationUpdates = true
-            // if #available(iOS 11.0, *) {
-            //     SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
-            // }
+            if #available(iOS 11.0, *) {
+                SwiftBackgroundLocationPlugin.locationManager?.showsBackgroundLocationIndicator = true;
+            }
             SwiftBackgroundLocationPlugin.locationManager?.pausesLocationUpdatesAutomatically = false
         }
     }
@@ -61,8 +61,8 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
                 }
             }
 
-            SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
-            // SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
+            // SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
+            SwiftBackgroundLocationPlugin.locationManager?.startMonitoringSignificantLocationChanges()
             running = true
             result(true)
         } else if (call.method == "is_service_running") {
@@ -71,8 +71,8 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             initLocationManager()
             running = false
             SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: "stop_location_service")
-            SwiftBackgroundLocationPlugin.locationManager?.stopUpdatingLocation()
-            // SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
+            // SwiftBackgroundLocationPlugin.locationManager?.stopUpdatingLocation()
+            SwiftBackgroundLocationPlugin.locationManager?.stopMonitoringSignificantLocationChanges()
             result(true)
         }
     }
