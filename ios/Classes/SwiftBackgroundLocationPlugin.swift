@@ -43,7 +43,7 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             let priority = args?["priority"] as? Int
 
             if (distanceFilter != nil) {
-                SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter;
+                SwiftBackgroundLocationPlugin.locationManager?.distanceFilter = distanceFilter ?? 0;
             }
 
             if (priority == 0) {
