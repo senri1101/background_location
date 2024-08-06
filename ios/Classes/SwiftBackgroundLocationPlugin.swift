@@ -6,6 +6,8 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
     static var locationManager: CLLocationManager?
     static var channel: FlutterMethodChannel?
     var running = false
+
+    private var lastLocationUpdateTime: Date?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = SwiftBackgroundLocationPlugin()
@@ -46,7 +48,6 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
             SwiftBackgroundLocationPlugin.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             // SwiftBackgroundLocationPlugin.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
             // SwiftBackgroundLocationPlugin.locationManager?.desiredAccuracy = kCLLocationAccuracyReduced
-            }
 
             SwiftBackgroundLocationPlugin.locationManager?.startUpdatingLocation()
             running = true
@@ -69,16 +70,26 @@ public class SwiftBackgroundLocationPlugin: NSObject, FlutterPlugin, CLLocationM
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = [
-            "speed": locations.last!.speed,
-            "altitude": locations.last!.altitude,
-            "latitude": locations.last!.coordinate.latitude,
-            "longitude": locations.last!.coordinate.longitude,
-            "accuracy": locations.last!.horizontalAccuracy,
-            "bearing": locations.last!.course,
-            "time": locations.last!.timestamp.timeIntervalSince1970 * 1000,
-            "is_mock": false
-        ] as [String : Any]
-        SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: location)    
+        guard let location = locations.last else { return }
+        
+        let currentTime = Date()
+        
+        // 前回の更新から5分経過しているか、または初回の更新の場合
+        if lastLocationUpdateTime == nil || currentTime.timeIntervalSince(lastLocationUpdateTime!) >= 300 { // 300秒 = 5分
+            lastLocationUpdateTime = currentTime
+            
+            let locationData = [
+                "speed": location.speed,
+                "altitude": location.altitude,
+                "latitude": location.coordinate.latitude,
+                "longitude": location.coordinate.longitude,
+                "accuracy": location.horizontalAccuracy,
+                "bearing": location.course,
+                "time": location.timestamp.timeIntervalSince1970 * 1000,
+                "is_mock": false
+            ] as [String : Any]
+            
+            SwiftBackgroundLocationPlugin.channel?.invokeMethod("location", arguments: locationData)
+        }
     }
 }
